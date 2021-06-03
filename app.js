@@ -20,17 +20,20 @@ app.post("/", function (req, res) {
 });
 
 app.get("/login", function (req, res) {
-    res.render('home');
+    res.render('login');
 });
 app.get("/register", function (req, res) {
-    res.render('home');
+    res.render('register');
 });
 app.get("/secrets", function (req, res) {
-    res.render('home');
+    res.render('secrets');
 });
 app.get("/submit", function (req, res) {
-    res.render('home');
+    res.render('submit');
 });
+
+
+
 //process.env.PORT || heroku code
 app.listen(process.env.PORT || 3000, function () {
     console.log("Server started on port 3000")
