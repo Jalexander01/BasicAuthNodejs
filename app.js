@@ -9,15 +9,21 @@ app.use(express.static("public"));//use static files like style.css and js
 
 const mongoose = require("mongoose");
 
+const encrypt = require("mongoose-encryption");
+
 mongoose.connect("mongodb://localhost:27017/userDB", { useNewUrlParser: true, useUnifiedTopology: true });
 
-const userSchema = {
+const userSchema = new mongoose.Schema({
     email: String,
     password: String
-};
+});
+
+
+// const SOME_LONG_UNGUESSABLE_STRING = "This is me right now";
+const secret = "Thisismerightnow";
+userSchema.plugin(encrypt, { secret: secret, encryptedFields: ['password'] });
 
 const User = mongoose.model("User", userSchema);
-
 
 
 
