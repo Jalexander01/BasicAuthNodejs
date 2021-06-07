@@ -1,4 +1,5 @@
 //Headers
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
@@ -20,7 +21,7 @@ const userSchema = new mongoose.Schema({
 
 
 // const SOME_LONG_UNGUESSABLE_STRING = "This is me right now";
-const secret = "Thisismerightnow";
+
 userSchema.plugin(encrypt, { secret: secret, encryptedFields: ['password'] });
 
 const User = mongoose.model("User", userSchema);
