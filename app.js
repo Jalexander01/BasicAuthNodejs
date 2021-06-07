@@ -1,5 +1,5 @@
 //Headers
-require('dotenv').config();
+// require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
@@ -10,7 +10,11 @@ app.use(express.static("public"));//use static files like style.css and js
 
 const mongoose = require("mongoose");
 
-const md5 = require("md5");
+// const md5 = require("md5");
+
+const bcrypt = require('bcrypt');
+const saltRounds = 12;
+
 
 mongoose.connect("mongodb://localhost:27017/userDB", { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -55,9 +59,11 @@ app.post("/", function (req, res) {
 });
 
 app.post("/register", function (req, res) {
+    const hash = bcrypt.hashSync(req.body.password, saltRounds);
+
     const newUser = new User({
         email: req.body.username,
-        password: md5(req.body.password)
+        password: hash
     });
     newUser.save(function (err) {
         if (err) {
@@ -71,14 +77,14 @@ app.post("/register", function (req, res) {
 
 app.post("/login", function (req, res) {
     const username = req.body.username;
-    const password = md5(req.body.password);
+    const password = req.body.password;
 
     User.findOne({ email: username }, function (err, foundUser) {
         if (err) {
             console.log(err);
         } else {
             if (foundUser) {
-                if (foundUser.password === password) {
+                if (bcrypt.compareSync(password, foundUser.password)) {
                     res.render("secrets");
 
                 }
